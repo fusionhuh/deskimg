@@ -1,26 +1,59 @@
 #include <gtk/gtk.h>
+#include <argp.h>
+#include <stdlib.h>
 
-static void
-print_hello (GtkWidget *widget,
-             gpointer   data)
+
+// argp details START //
+const char *argp_program_version = "deskimg-pre-p-rep-realpha";
+const char *argp_program_bug_address = "no@no.com";
+static char doc[] = "later";
+static char args_doc[] = "later 2";
+static struct
+argp_option options[] = {
+  { 0, 0, 0, 0, "General Options:", 1 },
+  { "opacity", 'o', "opacity_amount", 0, "Set the opacity of the graphic." },
+  { "decoratewindow", 'd', 0, 0, "Decorate the window." }
+};
+// argp details END //
+
+// global option vars START //
+double opacity;
+gboolean decorate = (gboolean) FALSE;
+char* filename = "/home/josh/Pictures/giphy.gif";
+// global option vars END //
+
+
+static error_t
+parse_opt (int key, char *arg, struct argp_state *state)
 {
-  g_print ("Hello World\n");
+  switch (key) 
+  {
+    case 'o':
+      opacity = strtod(arg, NULL);
+      break;
+    case 'd':
+      printf("decorate\n");
+      decorate = (gboolean) TRUE;
+      break;
+    case ARGP_KEY_ARG:
+      printf("arg\n");
+      filename = (char*) malloc(sizeof(arg));
+      strcpy(filename, arg);
+      break;
+  }
 }
 
 static void
-activate (GtkApplication *app,
-          gpointer        user_data)
+activate (GtkApplication *app, gpointer user_data)
 {
+  printf("starting app\n");
   GtkWidget *window;
-  GtkWidget *button;
-  GtkWidget *button_box;
 
   window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "Window");
-  //gtk_window_set_default_size (GTK_WINDOW (window), 200, 200);
 
   GtkWidget *image;
-  image = gtk_image_new_from_file ("/home/josh/Pictures/missing.gif");
+  image = gtk_image_new_from_file (filename);
 
   GdkScreen *screen;
   GdkVisual *visual;
@@ -34,35 +67,67 @@ activate (GtkApplication *app,
     gtk_widget_set_visual(window, visual);
   }
 
-  //button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  //gtk_container_add (GTK_CONTAINER (window), button_box);
-
   gtk_container_add (GTK_CONTAINER (window), image);
 
   gtk_window_set_decorated (GTK_WINDOW(window), FALSE);
 
   gtk_widget_set_opacity(window, 0.8);
 
-  //button = gtk_button_new_with_label ("Hello World");
-  //g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL);
-  //g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
-  //gtk_container_add (GTK_CONTAINER (button_box), button);
-
   gtk_widget_show_all (window);
+
 }
 
-int
-main (int    argc,
-      char **argv)
+static void
+open (GtkApplication* app, GFile** files, gint n_files, const gchar *hint)
 {
+  gint i;
+  n_files = 0;
+}
+
+static void
+command_line (GtkApplication* app, GApplicationCommandLine* cmdline)
+{
+  int p = 0;
+}
+
+static void
+handle_local_options (GtkApplication *app, GVariantDict* options)
+{
+  int p = 0;
+}
+
+static struct argp argp = { options, parse_opt, args_doc, doc };
+
+int
+main (int argc, char **argv)
+{
+  printf("before\n");
+  argp_parse(&argp, argc, argv, ARGP_IN_ORDER, 0, 0);
+  printf("after\n");
+
   GtkApplication *app;
   int status;
 
-  app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  printf("%s\n", filename);
+
+  app = gtk_application_new ("org.gtkmm.examples.base", (G_APPLICATION_HANDLES_OPEN & G_APPLICATION_HANDLES_COMMAND_LINE));
+
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+  printf("1\n");
+  g_signal_connect_swapped (app, "open", G_CALLBACK (open), NULL);
+  printf("2\n");
+  g_signal_connect_swapped (app, "command-line", G_CALLBACK (command_line), app);
+  printf("3\n");
+  g_signal_connect_swapped (app, "handle-local-options", G_CALLBACK (handle_local_options), app);
+
+  printf("here baby\n");
+
   status = g_application_run (G_APPLICATION (app), argc, argv);
+
   
   g_object_unref (app);
+
+
 
   return status;
 }
