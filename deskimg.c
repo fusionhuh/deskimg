@@ -12,7 +12,7 @@ gchar* filename;
 static gboolean
 clicked (GtkWidget *window, GdkEventButton *event, gpointer user_data)
 {
-  if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+  if (event->button == 1 /*&& event->type == GDK_2BUTTON_PRESS*/)
   {
     gint root_x;
     gint root_y;
@@ -57,6 +57,10 @@ activate (GtkApplication *app, gpointer user_data)
 
   gtk_widget_set_opacity(window, opacity);
 
+  gtk_window_set_keep_below (GTK_WINDOW (window), TRUE);
+
+  gtk_window_set_skip_taskbar_hint (GTK_WINDOW (window), TRUE);
+
   gtk_widget_show_all (window);
 }
 
@@ -99,6 +103,8 @@ main (int argc, char *argv[])
   int status;
 
   app = gtk_application_new ("org.gtkmm.examples.base", G_APPLICATION_HANDLES_COMMAND_LINE);
+
+  g_application_set_flags(app, G_APPLICATION_NON_UNIQUE);
 
   //add main options here
   g_application_add_main_option_entries (app, options);
