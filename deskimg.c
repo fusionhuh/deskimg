@@ -9,15 +9,32 @@ gboolean decorate = (gboolean) FALSE;
 gchar* filename;
 // global option vars END //
 
+static gboolean
+clicked (GtkWidget *window, GdkEventButton *event, gpointer user_data)
+{
+  if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+  {
+    gint root_x;
+    gint root_y;
+
+    gtk_window_get_position (GTK_WINDOW (window), &root_x, &root_y);
+
+    gtk_window_begin_move_drag (GTK_WINDOW (window), 1, root_x, root_y, 0);
+  }
+}
+
 
 static void
 activate (GtkApplication *app, gpointer user_data)
 {
-  printf("starting app\n");
   GtkWidget *window;
 
   window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "Window");
+
+  g_signal_connect (window, "button-press-event", G_CALLBACK (clicked), NULL);
+
+  gtk_widget_add_events(window, GDK_BUTTON_PRESS_MASK);
 
   GtkWidget *image;
   image = gtk_image_new_from_file (filename);
