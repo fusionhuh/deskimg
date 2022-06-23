@@ -19,7 +19,7 @@ certain mouse actions can trigger events that aid the user experience. a single 
 
 the config file is written to ~/.deskimg/config.sh. creating this directory in advance is not necessary; the program will handle creation of the directory as well as the file.
 
-for the best experience, it is recommended that you configures the config script to run on startup. if you don't want to do that or don't know how, just run `sh ~/.deskimg/config.sh` when desired.
+for the best experience, it is recommended that you configure the config script to run on startup. if you don't want to do that or don't know how, just run `sh ~/.deskimg/config.sh` when desired.
 
 note: transparency effects (and some other things probably?) require a compositing window manager.
 
