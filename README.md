@@ -21,6 +21,8 @@ the config file is written to ~/.deskimg/config.sh. creating this directory in a
 
 for the best experience, it is recommended that you configures the config script to run on startup. if you don't want to do that or don't know how, just run `sh ~/.deskimg/config.sh` when desired.
 
+note: transparency effects (and some other things probably?) require a compositing window manager.
+
 ## building
 deskimg only requires the GNU C standard library, the gcc compiler, and GTK3.0, which to my knowledge should be installed
 on just about any distro with a desktop environment.
