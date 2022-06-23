@@ -251,6 +251,25 @@ handle_local_options (GtkApplication *app, GVariantDict* options)
   save = g_variant_dict_lookup (options, "save", "b");
   toggle = g_variant_dict_lookup (options, "toggle", "b");
 
+  if (g_variant_dict_lookup (options, "reset", "b"))
+  {
+    char* user = strcat (getenv("HOME"), "/");
+
+    char* savedir = (char*) malloc(sizeof (char*) * strlen (user));
+    strcpy (savedir, user);
+    strcat (savedir, ".deskimg/");
+      
+    char* config_path = (char*) malloc(sizeof (char*) * strlen (savedir));
+    strcpy (config_path, savedir);
+    strcat (config_path, "config.sh");
+
+    FILE* config = fopen (config_path, "w+");
+    fclose (config);
+
+    printf ("Launched program to reset, exiting...\n");
+    exit (0);
+  }
+
   return -1;
 }
 
@@ -292,8 +311,14 @@ GOptionEntry options[] =
   /// *** Toggle
   {
     "toggle", 't', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_NONE,
-    NULL, "Allows you to toggle between keeping the image on top of all other windows or below. \
-    Toggle by right clicking on the graphic.", NULL
+    NULL, "Allows you to toggle between keeping the image on top of all other windows or below." 
+    " Toggle by right clicking on the graphic.", NULL
+  },
+
+  /// *** Reset
+  {
+    "reset", 'r', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_NONE,
+    NULL, "Resets the config file. Will immediately exit after config file is reset.", NULL
   },
 
   { NULL }
