@@ -15,7 +15,7 @@ deskimg is a lightweight program that enables users to conveniently display pict
   -t, --toggle                                 Allows you to toggle between keeping the image on top of all other windows or below. Toggle by right clicking on the graphic.
   -r, --reset                                  Resets the config file. Will immediately exit after config file is reset.
 ```
-certain mouse actions can trigger events that aid the user experience. a single mouse click on the graphic will begin to move it; a double middle click will close it; if the --toggle option is set, a single right click will move the graphic above or below all images; if the --save option is set, a double right click will save the image to the config file.
+certain mouse actions can trigger events that aid the user experience. a single mouse click on the graphic will begin to move it; a double middle click will close it; if the --toggle option is set, a single right click will move the graphic above or below all windows; if the --save option is set, a double right click will save the image to the config file.
 
 the config file is written to ~/.deskimg/config.sh. creating this directory in advance is not necessary; the program will handle creation of the directory as well as the file.
 
