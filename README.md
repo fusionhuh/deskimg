@@ -5,6 +5,12 @@ deskimg is a lightweight program that enables users to conveniently display pict
 ## examples
 ![Peek 2022-06-23 01-59](https://user-images.githubusercontent.com/59339739/175344013-24051e08-4eed-4719-8a31-9d6431bfeef5.gif)
 
+![gaming](https://user-images.githubusercontent.com/59339739/175719187-1cf33db7-e153-4e37-8d67-e96f054c0fe7.gif)
+credit: 
+https://imgur.com/gallery/lDYbKsd
+https://giphy.com/stickers/pixel-pixelart-nintendods-SUQWUAqVuV9uZbALUp
+https://purplehearts-pinkfarts.tumblr.com/post/187635226863
+
 ## usage
 ```
   -f, --file                                   Select the image/animation file to be displayed.
