@@ -32,3 +32,8 @@ to build, simply run the install script included in the repo like so:
 
 by default, the program installs to ~/.local/bin. if you would like to change that, run
 `gcc $(pkg-config --cflags gtk+-3.0) ./src/deskimg.c -o <desired directory>/deskimg $(pkg-config --libs gtk+-3.0)`
+
+if you installed the program with the `install.sh` script, you can simply uninstall with
+`sh uninstall.sh`
+
+if you compiled to a custom directory different from ~/.local/bin, for the time being you will have to remove the binary and config directory manually.
