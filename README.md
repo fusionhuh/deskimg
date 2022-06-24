@@ -15,6 +15,13 @@ https://giphy.com/stickers/pixel-pixelart-nintendods-SUQWUAqVuV9uZbALUp
 
 https://purplehearts-pinkfarts.tumblr.com/post/187635226863
 
+![eyes](https://user-images.githubusercontent.com/59339739/175721106-2c23265d-7852-488c-a7fc-14c24ab8a1d3.gif)
+
+i could not find the original creator, but here is the place where i downloaded from: https://vsgif.com/gif/2937394
+
+
+
+
 ## usage
 ```
   -f, --file                                   Select the image/animation file to be displayed.
@@ -39,6 +46,12 @@ on just about any distro with a desktop environment.
 
 to build, simply run the install script included in the repo like so:
 `sh install.sh`
+
+after compilation, you should get a wall of warnings that looks something like this: 
+
+![error](https://user-images.githubusercontent.com/59339739/175721608-3220aa04-f1b1-4ed7-8e12-2c659624001f.png)
+
+this is normal and, unless there is an error message directly at the bottom, the program should be installed successfully.
 
 by default, the program installs to ~/.local/bin. if you would like to change that, run
 `gcc $(pkg-config --cflags gtk+-3.0) ./src/deskimg.c -o <desired directory>/deskimg $(pkg-config --libs gtk+-3.0)`
