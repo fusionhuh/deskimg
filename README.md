@@ -36,4 +36,4 @@ by default, the program installs to ~/.local/bin. if you would like to change th
 if you installed the program with the `install.sh` script, you can simply uninstall with
 `sh uninstall.sh`
 
-if you compiled to a custom directory different from ~/.local/bin, for the time being you will have to remove the binary and config directory manually.
+if you want to uninstall and compiled to a custom directory different from ~/.local/bin, for the time being you will have to remove the binary and config directory manually.
