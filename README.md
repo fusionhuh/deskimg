@@ -1,5 +1,4 @@
-# deskimg
-## purpose
+# deskimg 
 deskimg is a lightweight program that enables users to conveniently display pictures and animations on the linux desktop.
 
 ## examples
@@ -19,9 +18,6 @@ https://purplehearts-pinkfarts.tumblr.com/post/187635226863
 
 i could not find the original creator, but here is the place where i downloaded from: https://vsgif.com/gif/2937394
 
-
-
-
 ## usage
 ```
   -f, --file                                   Select the image/animation file to be displayed.
@@ -38,25 +34,23 @@ the config file is written to ~/.deskimg/config.sh. creating this directory in a
 
 for the best experience, it is recommended that you configure the config script to run on startup. if you don't want to do that or don't know how, just run `sh ~/.deskimg/config.sh` when desired.
 
-note: transparency effects (and some other things probably?) require a compositing window manager.
+**NOTE**: transparency effects require a compositor. 
 
-## building
-deskimg only requires the GNU C standard library, the gcc compiler, and GTK3.0, which to my knowledge should be installed
-on just about any distro with a desktop environment.
+## requirements
+in order to build deskimg you need the gtk 3.0 header files and libraries.
 
-to build, simply run the install script included in the repo like so:
-`sh install.sh`
+## installation
+to build and install deskimg (if necessary as root):
+```
+make install
+```
 
-after compilation, you should get a wall of warnings that looks something like this: 
+by default, deskimg is installed to /usr/local/bin. if you would like to change that, run
+```
+make install PREFIX=~/.local
+```
 
-![error](https://user-images.githubusercontent.com/59339739/175721608-3220aa04-f1b1-4ed7-8e12-2c659624001f.png)
-
-this is normal and, unless there is an error message directly at the bottom, the program should be installed successfully.
-
-by default, the program installs to ~/.local/bin. if you would like to change that, run
-`gcc $(pkg-config --cflags gtk+-3.0) ./src/deskimg.c -o <desired directory>/deskimg $(pkg-config --libs gtk+-3.0)`
-
-if you installed the program with the `install.sh` script, you can simply uninstall with
-`sh uninstall.sh`
-
-if you want to uninstall and compiled to a custom directory different from ~/.local/bin, for the time being you will have to remove the binary and config directory manually.
+to uninstall (if necessary, apply the `PREFIX` you had used to install before.):
+```
+make uninstall
+```
