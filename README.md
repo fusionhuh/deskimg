@@ -4,6 +4,12 @@ deskimg is a lightweight program that enables users to conveniently display pict
 ## examples
 ![Peek 2022-06-23 01-59](https://user-images.githubusercontent.com/59339739/175344013-24051e08-4eed-4719-8a31-9d6431bfeef5.gif)
 
+credit:
+
+https://poke-polished.tumblr.com/post/100314390442
+
+https://a-little-ray-of-fantasy.tumblr.com/post/167874681996
+
 ![gaming](https://user-images.githubusercontent.com/59339739/175719187-1cf33db7-e153-4e37-8d67-e96f054c0fe7.gif)
 
 credit: 
@@ -17,6 +23,9 @@ https://purplehearts-pinkfarts.tumblr.com/post/187635226863
 ![eyes](https://user-images.githubusercontent.com/59339739/175721106-2c23265d-7852-488c-a7fc-14c24ab8a1d3.gif)
 
 i could not find the original creator, but here is the place where i downloaded from: https://vsgif.com/gif/2937394
+
+**NOTE**: some of the files listed above are in .webp format. deskimg does not support .webp files at the moment, but you can very easily convert them
+to .gif here: https://ezgif.com/webp-to-gif
 
 ## usage
 ```
