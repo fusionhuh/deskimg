@@ -71,7 +71,7 @@ clicked (GtkWidget* window, GdkEventButton* event, gpointer user_data)
 
       char* savedir = (char*) malloc(sizeof (char*) * strlen (user));
       strcpy (savedir, user);
-      strcat (savedir, ".deskimg/");
+      strcat (savedir, ".config/deskimg/");
       
       char* config_path = (char*) malloc(sizeof (char*) * strlen (savedir));
       strcpy (config_path, savedir);
