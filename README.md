@@ -1,5 +1,5 @@
 # deskimg 
-deskimg is a lightweight program that enables users to conveniently display pictures and animations on the linux desktop.
+deskimg is a lightweight program that enables users to conveniently display pictures and animations on the linux desktop. 
 
 ## examples
 ![Peek 2022-06-23 01-59](https://user-images.githubusercontent.com/59339739/175344013-24051e08-4eed-4719-8a31-9d6431bfeef5.gif)
@@ -28,11 +28,10 @@ i could not find the original creator, but here is the place where i downloaded 
   -t, --toggle                                 Allows you to toggle between keeping the image on top of all other windows or below. Toggle by right clicking on the graphic.
   -r, --reset                                  Resets the config file. Will immediately exit after config file is reset.
 ```
+
 certain mouse actions can trigger events that aid the user experience. a single mouse click on the graphic will begin to move it; a double middle click will close it; if the --toggle option is set, a single right click will move the graphic above or below all windows; if the --save option is set, a double right click will save the image to the config file.
 
-the config file is written to ~/.deskimg/config.sh. creating this directory in advance is not necessary; the program will handle creation of the directory as well as the file.
-
-for the best experience, it is recommended that you configure the config script to run on startup. if you don't want to do that or don't know how, just run `sh ~/.deskimg/config.sh` when desired.
+in order to save configurations, deskimg can write commands to a bash script `~/.config/deskimg/config.sh` that can be executed later. for the best experience, it is recommended that you configure the config script to run on startup. if you don't want to do that or don't know how, just run `sh ~/.config/deskimg/config.sh` when desired.
 
 **NOTE**: transparency effects require a compositor. 
 
