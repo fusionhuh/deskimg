@@ -33,7 +33,7 @@ to .gif here: https://ezgif.com/webp-to-gif
   -o, --opacity=Decimal value from 0 to 1.     Set the opacity of the graphic.
   -x, --x_pos=Integer values only.             Set the x-position of the graphic on the screen.
   -y, --y_pos=Integer values only.             Set the y-position of the graphic on the screen.
-  -s, --save                                   Allow the program to save the current graphic and its position to the config file located in ~/.deskimg/config.sh.
+  -s, --save                                   Allow the program to save the current graphic and its position to the config file located in ~/.config/deskimg/config.sh.
   -t, --toggle                                 Allows you to toggle between keeping the image on top of all other windows or below. Toggle by right clicking on the graphic.
   -r, --reset                                  Resets the config file. Will immediately exit after config file is reset.
 ```
