@@ -305,7 +305,7 @@ GOptionEntry options[] =
   /// *** Save
   {
     "save", 's', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_NONE,
-    NULL, "Allow the program to save the current graphic and its position to the config file located in ~/.deskimg/config.sh.", NULL
+    NULL, "Allow the program to save the current graphic and its position to the config file located in ~/.config/deskimg/config.sh.", NULL
   },
 
   /// *** Toggle
