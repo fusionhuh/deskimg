@@ -7,7 +7,7 @@
 
 // global option vars START //
 gdouble opacity = 1;
-gboolean decorate = (gboolean) FALSE;
+gboolean decorate = FALSE;
 gchar* filename;
 gint x_pos = 0;
 gint y_pos = 0;
@@ -229,7 +229,7 @@ activate (GtkApplication* app, gpointer user_data)
 
   gtk_window_set_decorated (GTK_WINDOW (window), FALSE);      // Removes the border around the window.
 
-  gtk_widget_set_opacity(window, opacity);                    // Sets the window to the opacity specified by options.
+  gtk_widget_set_opacity (window, opacity);                    // Sets the window to the opacity specified by options.
 
   gtk_window_set_keep_below (GTK_WINDOW (window), TRUE);  // Keeps the window below or above all other windows on screen.
 
@@ -257,7 +257,7 @@ handle_local_options (GtkApplication *app, GVariantDict* options)
 
     char* savedir = (char*) malloc(sizeof (char*) * strlen (user));
     strcpy (savedir, user);
-    strcat (savedir, ".deskimg/");
+    strcat (savedir, ".config/deskimg/");
       
     char* config_path = (char*) malloc(sizeof (char*) * strlen (savedir));
     strcpy (config_path, savedir);
