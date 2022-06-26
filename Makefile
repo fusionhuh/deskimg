@@ -3,7 +3,7 @@ PREFIX = /usr/local
 
 LIBS   = `pkg-config --libs gtk+-3.0`
 INCS   = `pkg-config --cflags gtk+-3.0`
-CFLAGS = $(INCS) $(LIBS) -Wno-incompatible-pointer-types
+CFLAGS = $(INCS) -Wno-incompatible-pointer-types
 
 deskimg: deskimg.c
 	${CC} ${CFLAGS} -o deskimg deskimg.c $(LIBS)
