@@ -3,7 +3,7 @@ PREFIX = /usr/local
 
 LIBS   = `pkg-config --libs gtk+-3.0`
 INCS   = `pkg-config --cflags gtk+-3.0`
-CFLAGS = $(INCS) -Wno-incompatible-pointer-types
+CFLAGS = $(INCS) -Wno-incompatible-pointer-types -ggdb -O0
 
 deskimg: deskimg.c
 	${CC} ${CFLAGS} -o deskimg deskimg.c $(LIBS)
@@ -14,7 +14,7 @@ install: deskimg
 	chmod 755 ${DESTDIR}${PREFIX}/bin/deskimg
 
 uninstall:
-	rm -rf ${DESTDIR}${PREFIX}/bin/deskimg ~/.deskimg/ ~/.config/deskimg/
+	rm -rf ${DESTDIR}${PREFIX}/bin/deskimg $${HOME}/.deskimg/ $${HOME}/.config/deskimg/
 
 clean:
-	rm -f deskimg 
+	rm -f deskimg
