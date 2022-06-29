@@ -55,10 +55,11 @@ make install
 
 by default, deskimg is installed to /usr/local/bin. if you would like to change that, run
 ```
-make install PREFIX=~/.local
+make install PREFIX=<desired dir>
 ```
 
 to uninstall (if necessary, apply the `PREFIX` you had used to install before.):
 ```
 make uninstall
 ```
+**NOTE**: even with custom install directories config files will still be written to `~/.config/deskimg/`.
