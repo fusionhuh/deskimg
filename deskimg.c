@@ -248,10 +248,12 @@ handle_local_options (GtkApplication *app, GVariantDict* options)
   g_variant_dict_lookup (options, "opacity", "d", &opacity);
   g_variant_dict_lookup (options, "x_pos", "i", &x_pos);
   g_variant_dict_lookup (options, "y_pos", "i", &y_pos);
-  save = g_variant_dict_lookup (options, "save", "b");
-  toggle = g_variant_dict_lookup (options, "toggle", "b");
+  g_variant_dict_lookup (options, "save", "b", &save);
+  g_variant_dict_lookup (options, "toggle", "b", &toggle);
+  gboolean reset = FALSE;
+  g_variant_dict_lookup (options, "reset", "b", &reset);
 
-  if (g_variant_dict_lookup (options, "reset", "b"))
+  if (reset)
   {
     char* user = strcat (getenv("HOME"), "/");
 
