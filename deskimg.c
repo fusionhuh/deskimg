@@ -36,7 +36,7 @@ clicked (GtkWidget* window, GdkEventButton* event, gpointer user_data)
   }
   if (event->button == 2 && event->type == GDK_2BUTTON_PRESS) // Emergency exit for processes launched on startup
   {
-    exit (1);
+    gdk_window_destroy (GTK_WINDOW (window));
   }
   if (event->button == 3)
   {
@@ -67,19 +67,19 @@ clicked (GtkWidget* window, GdkEventButton* event, gpointer user_data)
 
       gtk_window_get_position (GTK_WINDOW (window), &root_x, &root_y);
 
-      char* user = strcat (getenv("HOME"), "/");
+      const char* user = strcat (getenv("HOME"), "/");
 
-      char* savedir = (char*) malloc(sizeof (char*) * strlen (user));
-      strcpy (savedir, user);
+      char* savedir = (char*) calloc (strlen (user) + strlen (".config/deskimg/") + 1, sizeof (char));
+      strcat (savedir, user);
       strcat (savedir, ".config/deskimg/");
       
-      char* config_path = (char*) malloc(sizeof (char*) * strlen (savedir));
-      strcpy (config_path, savedir);
+      char* config_path = (char*) calloc (strlen (savedir) + strlen ("config.sh") + 1, sizeof (char));
+      strcat (config_path, savedir);
       strcat (config_path, "config.sh");
 
       // Get the PID of the process. Will be used to check if we've already written to the config.sh file from this process.
       // If we have written to it, we don't add a new line and simply modify the line that currently exists.
-      char* pid = (char*) malloc (sizeof (char*) * 7); // 7 characters is the max length of a PID
+      char pid[7] = {0}; // 7 characters is the max length of a PID
       snprintf(pid, 7, "%d", getpid()); 
 
       const char* deskimg = "deskimg"; // should update this to be argv[0] later
@@ -100,12 +100,10 @@ clicked (GtkWidget* window, GdkEventButton* event, gpointer user_data)
       }
       command_size++;
 
-      char* command = (char*) malloc(sizeof (char*) * command_size);
-      command[0] = '\0'; // Setting first character to be null so strncat works properly
+      char* command = (char*) calloc(command_size, sizeof (char));
       strncat (command, &command_buf, command_size);
 
       FILE* config;
-      FILE* bashrc;
 
       mkdir (savedir, 0777);
       if (!(config = fopen (config_path, "r+"))) // If the file does not open with read flag, we must create the file using the write flag
@@ -119,7 +117,7 @@ clicked (GtkWidget* window, GdkEventButton* event, gpointer user_data)
 
       if (config_size > 0) // Config file is not empty, need to parse to see if PID is in file.
       {
-        char* buffer = (char*) malloc (sizeof (char*) * config_size);
+        char* buffer = (char*) malloc (sizeof (char) * config_size);
         fread (buffer, 1, config_size, config);
 
         if (strstr (buffer, pid) != NULL) // PID is found in file, need to find line on which it occurs to update it.
@@ -151,8 +149,8 @@ clicked (GtkWidget* window, GdkEventButton* event, gpointer user_data)
 
                 pointer++; // Increment right pointer so we start cloning AFTER the right line break (i.e. leave it out of the buffer)
 
-                char* left_buffer = (char*) malloc (sizeof (char*) * (left_pointer+1));
-                char* right_buffer = (char*) malloc (sizeof (char*) * (config_size - pointer));
+                char* left_buffer = (char*) malloc (sizeof (char) * (left_pointer+1));
+                char* right_buffer = (char*) malloc (sizeof (char) * (config_size - pointer));
 
                 fseek (config, 0, SEEK_SET); // Set file pointer to the beginning of the file.
                 fread (left_buffer, 1, left_pointer + 1, config);
@@ -192,6 +190,10 @@ clicked (GtkWidget* window, GdkEventButton* event, gpointer user_data)
         fwrite (command, 1, command_size, config);
       }
 
+      free (command);
+      free (savedir);
+      free (config_path);
+
       fclose (config);
 
       printf ("saved!\n");
@@ -208,6 +210,7 @@ activate (GtkApplication* app, gpointer user_data)
   gtk_window_set_title (GTK_WINDOW (window), "Window");
 
   g_signal_connect (window, "button-press-event", G_CALLBACK (clicked), NULL);
+  g_signal_connect_swapped (window, "destroy", G_CALLBACK (g_application_quit), app);
 
   gtk_widget_add_events(window, GDK_BUTTON_PRESS_MASK);       // Adds click event to window widget.
 
@@ -257,11 +260,11 @@ handle_local_options (GtkApplication *app, GVariantDict* options)
   {
     char* user = strcat (getenv("HOME"), "/");
 
-    char* savedir = (char*) malloc(sizeof (char*) * strlen (user));
+    char* savedir = (char*) malloc(sizeof (char) * strlen (user));
     strcpy (savedir, user);
     strcat (savedir, ".config/deskimg/");
       
-    char* config_path = (char*) malloc(sizeof (char*) * strlen (savedir));
+    char* config_path = (char*) malloc(sizeof (char) * strlen (savedir));
     strcpy (config_path, savedir);
     strcat (config_path, "config.sh");
 
@@ -269,9 +272,8 @@ handle_local_options (GtkApplication *app, GVariantDict* options)
     fclose (config);
 
     printf ("Launched program to reset, exiting...\n");
-    exit (0);
+    exit (1);
   }
-
   return -1;
 }
 

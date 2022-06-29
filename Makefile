@@ -14,7 +14,7 @@ install: deskimg
 	chmod 755 ${DESTDIR}${PREFIX}/bin/deskimg
 
 uninstall:
-	rm -rf ${DESTDIR}${PREFIX}/bin/deskimg $${HOME}/.deskimg/ $${HOME}/.config/deskimg/
+	rm -rf ${DESTDIR}${PREFIX}/bin/deskimg ~/.deskimg/ ~/.config/deskimg/
 
 clean:
 	rm -f deskimg
