@@ -2,6 +2,11 @@
 deskimg is a lightweight program that enables users to conveniently display pictures and animations on the linux desktop. 
 
 ## examples
+
+![chimchar](https://user-images.githubusercontent.com/59339739/176975278-f5328a44-ed49-40fd-b350-c9ea595c108d.gif)
+
+credit: https://aminoapps.com/c/pokemon/page/blog/favorite-in-the-chimchar-line/wnho_uJWYndwKbZoRjwkDXr5DgRMKR
+
 ![Peek 2022-06-23 01-59](https://user-images.githubusercontent.com/59339739/175344013-24051e08-4eed-4719-8a31-9d6431bfeef5.gif)
 
 credit:
