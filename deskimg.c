@@ -129,12 +129,13 @@ clicked (GtkWidget* window, GdkEventButton* event, gpointer user_data)
             if (buffer[pointer] == '#') // Comment found, need to check if PID is the same
             {
               pointer++; // Increment pointer to start on character after '#'
+              int initial_pointer = pointer;
 
-              char new_pid[1] = "";
+              char new_pid[7] = {0};
 
-              while (buffer[pointer] != 10 && buffer[pointer] != 32 && pointer < config_size) // 10 is the newline char in ASCII; need to also check for space char bc comment might not be PID 
+              while (buffer[pointer] != 10 && buffer[pointer] != 32 && pointer < config_size && pointer - initial_pointer <= 6) // 10 is the newline char in ASCII; need to also check for space char bc comment might not be PID 
               {
-                strncat (new_pid, &buffer[pointer], 1);
+                strncat (&new_pid, &buffer[pointer], 1);
                 pointer++;
               }
 
