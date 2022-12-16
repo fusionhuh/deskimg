@@ -36,13 +36,13 @@ to .gif here: https://ezgif.com/webp-to-gif
 
 ## usage
 ```
-  -f, --file                                   Select the image/animation file to be displayed.
-  -o, --opacity=Decimal value from 0 to 1.     Set the opacity of the graphic.
-  -x, --x_pos=Integer values only.             Set the x-position of the graphic on the screen.
-  -y, --y_pos=Integer values only.             Set the y-position of the graphic on the screen.
-  -s, --save                                   Allow the program to save the current graphic and its position to the config file located in ~/.config/deskimg/config.sh.
-  -t, --toggle                                 Allows you to toggle between keeping the image on top of all other windows or below. Toggle by right clicking on the graphic.
-  -r, --reset                                  Resets the config file. Will immediately exit after config file is reset.
+    -f, --file                                                                     Select the image/animation file to be displayed.
+    -o, --opacity=Decimal value from 0 to 1.         Set the opacity of the graphic.
+    -x, --x_pos=Integer values only.                         Set the x-position of the graphic on the screen.
+    -y, --y_pos=Integer values only.                         Set the y-position of the graphic on the screen.
+    -s, --save                                                                     Allow the program to save the current graphic and its position to the config file located in ~/.config/deskimg/config.sh.
+    -t, --toggle                                                                 Allows you to toggle between keeping the image on top of all other windows or below. Toggle by right clicking on the graphic.
+    -r, --reset                                                                    Resets the config file. Will immediately exit after config file is reset.
 ```
 
 certain mouse actions can trigger events that aid the user experience. a single mouse click on the graphic will begin to move it; a double middle click will close it; if the --toggle option is set, a single right click will move the graphic above or below all windows; if the --save option is set, a double right click will save the image to the config file.

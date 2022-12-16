@@ -1,8 +1,8 @@
-CC     = gcc
+CC         = gcc
 PREFIX = /usr/local
 
-LIBS   = `pkg-config --libs gtk+-3.0`
-INCS   = `pkg-config --cflags gtk+-3.0`
+LIBS     = `pkg-config --libs gtk+-3.0`
+INCS     = `pkg-config --cflags gtk+-3.0`
 CFLAGS = $(INCS) -Wno-incompatible-pointer-types -ggdb -O0
 
 deskimg: deskimg.c
