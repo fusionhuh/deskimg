@@ -4,6 +4,9 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <iostream>
+#include <fstream>
+#include <stack>
 
 // global option vars START //
 gdouble opacity = 1;
@@ -16,6 +19,8 @@ gboolean toggle = FALSE;
 gboolean top = FALSE;
 gboolean bottom = TRUE;
 // global option vars END //
+
+using namespace std;
 
 void move_window(GtkWindow* window) { // move window to mouse position
     gint root_x;
@@ -46,149 +51,83 @@ void toggle_window_depth(GtkWindow* window) { // toggle whether or not window si
     }
 }
 
-void update_line_with_pid(const char* pid, char* buffer, int config_size, FILE* config, const char* command, int command_size, const char* config_path) {
-    int pointer = 0;
-
-    while (pointer < config_size)
-    {
-        if (buffer[pointer] == '#') // Comment found, need to check if PID is the same
-        {
-            pointer++; // Increment pointer to start on character after '#'
-            int initial_pointer = pointer;
-
-            char new_pid[7] = {0};
-
-            while (buffer[pointer] != 10 && buffer[pointer] != 32 && pointer < config_size && pointer - initial_pointer <= 6) // 10 is the newline char in ASCII; need to also check for space char bc comment might not be PID 
-            {
-                strncat (&new_pid, &buffer[pointer], 1);
-                pointer++;
-            }
-
-            if (strcmp(pid, new_pid) == 0) // PID matches! Find the left and right bounds and eliminate the line.
-            {
-                int left_pointer = pointer - 1; // Decrement left pointer to start before newline or EOF
-
-                while (buffer[left_pointer] != 10 && left_pointer > 0)
-                {
-                    left_pointer--;
-                }
-
-                pointer++; // Increment right pointer so we start cloning AFTER the right line break (i.e. leave it out of the buffer)
-
-                char* left_buffer = (char*) malloc (sizeof (char) * (left_pointer+1));
-                char* right_buffer = (char*) malloc (sizeof (char) * (config_size - pointer));
-
-                fseek (config, 0, SEEK_SET); // Set file pointer to the beginning of the file.
-                fread (left_buffer, 1, left_pointer + 1, config);
-                fseek (config, 0, pointer); // Set file pointer to start reading after the line we are replacing.
-                fread (right_buffer, 1, config_size - pointer, config); // Right buffer contains all of the text AFTER the line.
-
-                fclose(config);
-                config = fopen(config_path, "w+");
-
-                fwrite (left_buffer, 1, left_pointer+1, config);
-                fwrite (command, 1, command_size, config);
-                fwrite (right_buffer, 1, config_size - pointer, config);
-
-                free(left_buffer);
-                free(right_buffer);
-
-                pointer = config_size; // Break outermost loop
-            }
-            // PID doesn't match; increment pointer and start searching again
-        }
-        pointer++;
-    }
-}
-
-
 void save_window(GtkWindow* window) {
     printf("Saving... ");
 
-    gint root_x = 0;
-    gint root_y = 0;
+    gint root_x, root_y;
 
     gtk_window_get_position (GTK_WINDOW (window), &root_x, &root_y);
 
-    const char* user = strcat (getenv("HOME"), "/");
+    std::string user = std::string(getenv("HOME")) + "/";
+    std::string savedir = user + ".config/deskimg/";
+    std::string config_path = savedir + "config.sh";
 
-    char* savedir = (char*) calloc (strlen (user) + strlen (".config/deskimg/") + 1, sizeof (char));
-    strcat (savedir, user);
-    strcat (savedir, ".config/deskimg/");
-
-    char* config_path = (char*) calloc (strlen (savedir) + strlen ("config.sh") + 1, sizeof (char));
-    strcat (config_path, savedir);
-    strcat (config_path, "config.sh");
-
-    // Get the PID of the process. Will be used to check if we've already written to the config.sh file from this process.
-    // If we have written to it, we don't add a new line and simply modify the line that currently exists.
-    char pid[7] = {0}; // 7 characters is the max length of a PID
-    snprintf(pid, 7, "%d", getpid()); 
-
-    const char* deskimg = "deskimg"; // should update this to be argv[0] later
-
-    char command_buf[256] = {0};
+    std::string command; command.resize(512,'n');
     snprintf (
-        &command_buf, 256, 
-        "%s -f %s -o %f -x %i %s--y_pos=%i & #%s\n", 
-        deskimg, filename, opacity, root_x, 
+        command.data(), 512, 
+        "%s -f %s -o %f -x %i %s--y_pos=%i & #%d\n", 
+        "deskimg ", filename, opacity, root_x, 
         toggle ? "-t " : "", // Use this format for adding optional arguments in future
         root_y, 
-        pid
+        getpid()
     );
-
-    int command_size = 0;
-    while (command_buf[command_size] != 10)
-    {
-        command_size++;
-    }
-    command_size++;
-
-    char* command = (char*) calloc(command_size, sizeof (char));
-    strncat (command, &command_buf, command_size);
-
-    FILE* config;
-
-    mkdir (savedir, 0777);
-    if (!(config = fopen (config_path, "r+"))) // If the file does not open with read flag, we must create the file using the write flag
-    {
-        config = fopen (config_path, "w+");
-    }
-
-    fseek (config, 0, SEEK_END);     // Determine the size in bytes of the file.
-    int config_size = ftell (config); //
-    rewind (config);                  //
-
-    if (config_size > 0) // Config file is not empty, need to parse to see if PID is in file.
-    {
-        char* buffer = (char*) malloc (sizeof (char) * config_size);
-        fread (buffer, 1, config_size, config);
-
-        if (strstr(buffer, pid) != NULL) // PID is found in file, need to find line on which it occurs to update it.
-        {
-            update_line_with_pid(pid, buffer, config_size, config, command, command_size, config_path);
+    for (uint16_t i = 0; i < 512; i++) {
+        if (command[i] == '\n') {
+            command.resize(i + 1);
+            command.shrink_to_fit();
+            break;
         }
-        else // PID is not found, can simply write command at the end of the file.
-        {
-            fseek (config, 0, SEEK_END);
-            fwrite ((char*) "\n", 1, 1, config); // Writing newline char to file in case it isn't at the end.
-            fwrite (command, 1, command_size, config);
+    }
+    if (command.back() != '\n') {
+        std::cout << command;
+        std::cout << "Command size: " + command.size();
+        std::cerr << "Something went wrong while creating the command string.\n";
+        exit(1);
+    }
+
+    mkdir (savedir.c_str(), 0777);
+    std::fstream config_file; config_file.open(config_path.c_str(), std::ios::in | std::ios::app);
+    if (!config_file) {
+        std::cerr << "Config file could not be opened.\n";
+    }
+
+//  first check that file is empty or not (no /bin/bash as first line)
+    std::string first_line; std::getline(config_file, first_line);
+    config_file.clear(); // clear failbit
+    if (first_line.compare("#!/bin/bash") != 0) {
+        config_file << "#!/bin/bash\n";
+        config_file << command;
+        std::cout << command;
+        config_file.close();
+        printf ("saved!\n");
+        return;
+    }
+
+//  file is not empty, need to look for PID
+    std::string new_file_contents = "#!/bin/bash\n";
+    bool found_pid = false;
+    while(config_file) {
+        std::string curr_line; std::getline(config_file, curr_line);
+        if (curr_line.find(std::to_string(getpid())) != std::string::npos) { // PID is found in file, need to replace with new line
+            new_file_contents += command;
+            found_pid = true;
         }
-
-        free (buffer);
+        else {
+            if (curr_line.size() > 0) { // avoid re-adding empty lines
+                new_file_contents += curr_line + "\n";
+            }
+        }
     }
-    else // Config file is empty.
-    {
-        const char* bash = "#!/bin/bash\n";
-        fwrite (bash, 1, strlen (bash), config);
-        fwrite (command, 1, command_size, config);
+    config_file.close(); config_file.open(config_path.c_str(), std::ios::trunc | std::ios::out);
+//  open for write mode, create new file
+    config_file << new_file_contents;
+
+//  Check that PID existed in file. If it DOESN'T, the PID was never in the file and we need to add the command we created earlier.
+    if (!found_pid) {
+        config_file << command;
     }
 
-    free (command);
-    free (savedir);
-    free (config_path);
-
-    fclose (config);
+    config_file << std::endl;
 
     printf ("saved!\n");
 }
@@ -204,7 +143,7 @@ clicked (GtkWidget* window, GdkEventButton* event, gpointer user_data)
     // double middle click
     if (event->button == 2 && event->type == GDK_2BUTTON_PRESS) // Emergency exit for processes launched on startup
     {
-        gdk_window_destroy (GTK_WINDOW(window));
+        gdk_window_destroy (GDK_WINDOW(window));
     }
     // right click
     if (event->button == 3)
@@ -216,6 +155,7 @@ clicked (GtkWidget* window, GdkEventButton* event, gpointer user_data)
     {
         save_window(GTK_WINDOW(window));
     }
+    return true;
 }
 
 static void
@@ -289,7 +229,6 @@ handle_local_options (GtkApplication *app, GVariantDict* options)
         fclose (config);
 
         printf ("Launched program to reset, exiting...\n");
-        exit (1);
     }
     return -1;
 }
@@ -353,9 +292,9 @@ main (int argc, char *argv[])
 
     app = gtk_application_new ("org.gtkmm.examples.base", G_APPLICATION_HANDLES_OPEN);
 
-    g_application_set_flags(app, G_APPLICATION_NON_UNIQUE);
+    g_application_set_flags(G_APPLICATION(app), G_APPLICATION_NON_UNIQUE);
 
-    g_application_add_main_option_entries (app, options);    // Adds the options in the GOptionEntry array to the commmand line parser(?)
+    g_application_add_main_option_entries (G_APPLICATION(app), options);    // Adds the options in the GOptionEntry array to the commmand line parser(?)
 
     g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
     g_signal_connect_swapped (app, "handle-local-options", G_CALLBACK (handle_local_options), app);

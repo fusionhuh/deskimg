@@ -1,1 +1,6 @@
 deskimg
+.vscode
+vscode
+*.o
+*.bin
+*.so

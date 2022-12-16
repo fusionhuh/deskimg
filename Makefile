@@ -1,12 +1,12 @@
 CC         = gcc
 PREFIX = /usr/local
 
-LIBS     = `pkg-config --libs gtk+-3.0`
-INCS     = `pkg-config --cflags gtk+-3.0`
-CFLAGS = $(INCS) -Wno-incompatible-pointer-types -ggdb -O0
+LIBS     = `pkg-config --libs gtk+-3.0` -lstdc++
+INCS     = 
+CFLAGS = $(INCS) -std=c++17 `pkg-config --cflags gtk+-3.0` 
 
-deskimg: deskimg.c
-	${CC} ${CFLAGS} -o deskimg deskimg.c $(LIBS)
+deskimg: deskimg.cpp
+	${CC} ${CFLAGS} -o deskimg deskimg.cpp $(LIBS)
 
 install: deskimg
 	mkdir -p ${DESTDIR}${PREFIX}/bin
